@@ -173,13 +173,17 @@ class MonthlySplit(BaseCrossValidator):
             Column name to use as datetime information. If "index", use X.index.
         """
         self.time_col = time_col
+
     def _get_times(self, X):
         """Return datetime-like index/series used for splitting."""
         if self.time_col == "index":
             if not hasattr(X, "index"):
                 raise ValueError("X must have an index to use time_col='index'")
             if not isinstance(X.index, pd.DatetimeIndex):
-                raise ValueError("X.index must be a DatetimeIndex when time_col='index'")
+                raise ValueError(
+                    "X.index must be a DatetimeIndex when "
+                    "time_col='index'"
+                )
             return pd.DatetimeIndex(X.index)
         if not isinstance(X, pd.DataFrame):
             raise ValueError("X must be a DataFrame when time_col is a column name")
@@ -187,8 +191,11 @@ class MonthlySplit(BaseCrossValidator):
             raise ValueError(f"Column {self.time_col} not found in X")
         times = X[self.time_col]
         if not pd.api.types.is_datetime64_any_dtype(times):
-            raise ValueError(f"Column {self.time_col} must have datetime dtype")
+            raise ValueError(
+                f"Column {self.time_col} must have datetime dtype"
+            )
         return pd.DatetimeIndex(times)
+
     def get_n_splits(self, X, y=None, groups=None):
         """Return the number of splitting iterations.
 
@@ -210,6 +217,7 @@ class MonthlySplit(BaseCrossValidator):
         months = times.to_period("M")
         n_unique_months = len(pd.PeriodIndex(months).unique())
         return max(0, n_unique_months - 1)
+
     def split(self, X, y=None, groups=None):  # y should be optional
         """Generate indices to split data into training and test set.
 
