@@ -186,7 +186,9 @@ class MonthlySplit(BaseCrossValidator):
                 )
             return pd.DatetimeIndex(X.index)
         if not isinstance(X, pd.DataFrame):
-            raise ValueError("X must be a DataFrame when time_col is a column name")
+            raise ValueError(
+                "X must be a DataFrame when time_col is a column name"
+            )
         if self.time_col not in X.columns:
             raise ValueError(f"Column {self.time_col} not found in X")
         times = X[self.time_col]
