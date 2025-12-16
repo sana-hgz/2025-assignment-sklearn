@@ -62,6 +62,7 @@ class KNearestNeighbors(ClassifierMixin, BaseEstimator):
 
     def __init__(self, n_neighbors=1):  # noqa: D107
         """Initialize the classifier.
+
         Parameters
         ----------
         n_neighbors : int, default=1
@@ -162,6 +163,7 @@ class KNearestNeighbors(ClassifierMixin, BaseEstimator):
 
 class MonthlySplit(BaseCrossValidator):
     """CrossValidator based on monthly split."""
+
     def __init__(self, time_col="index"):
         """Initialize the splitter.
 
@@ -198,18 +200,19 @@ class MonthlySplit(BaseCrossValidator):
             Ignored, exists for compatibility.
         groups : array-like, default=None
             Ignored, exists for compatibility.
-                    Returns
+
+        Returns
         -------
         n_splits : int
             Number of splits.
         """
-
         times = self._get_times(X)
         months = times.to_period("M")
         n_unique_months = len(pd.PeriodIndex(months).unique())
         return max(0, n_unique_months - 1)
     def split(self, X, y=None, groups=None):  # y should be optional
         """Generate indices to split data into training and test set.
+
         Parameters
         ----------
         X : array-like
@@ -234,4 +237,3 @@ class MonthlySplit(BaseCrossValidator):
             idx_train = np.where(months == m_train)[0].astype(int)
             idx_test = np.where(months == m_test)[0].astype(int)
             yield idx_train, idx_test
-            
